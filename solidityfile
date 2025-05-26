@@ -1,0 +1,192 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.22;
+contract MyContract {
+    struct ADST{
+        string  hash;
+        string origin;
+        string from;
+        string[] products;
+        uint[] quantities;
+        string endtime;
+        string status;
+        bool exists;
+    }
+    string[] public  divisions;
+    mapping(string=>string[]) public  adsts;
+    mapping(string=>mapping (string=>ADST)) public requestsent;
+    mapping (string=>mapping (string=>ADST)) public  requestreceived;
+    mapping (string=>string[]) getsenthashes;
+     mapping (string=>string[]) getreceivedhashes;
+     mapping (string=>mapping (string=>string[])) public  trackorder;
+     function gettrackorder(string memory origin,string memory hash) public  view returns(string[] memory){
+        return trackorder[origin][hash];
+     }
+    function divisionsadd(string memory div) public {
+        divisions.push(div);
+    }
+    function adstsadd(string memory div,string memory adst) public {
+        adsts[div].push(adst);
+    }
+    function adstsend(string memory hash,string memory origin,string memory div,string[] memory p,uint[] memory q,string memory endtime) public {
+        requestsent[origin][hash]=ADST(hash,origin,origin,p,q,endtime,"approved to division",true);
+        trackorder[origin][hash].push(string(abi.encodePacked("send to ",div)));
+        getsenthashes[origin].push(hash);
+        getreceivedhashes[div].push(hash);
+        requestreceived[div][hash]=ADST(hash,origin,origin,p,q,endtime,"pending",true);
+    }
+    function adstaccept(string memory currentadst,string memory hash,string memory origin,string memory division,bool temp1,string memory s) public {
+          for(uint i=0;i<divisions.length;i++){
+                for(uint j=0;j<adsts[divisions[i]].length;j++){
+                         if(keccak256(bytes(adsts[divisions[i]][j]))!=keccak256(bytes(currentadst)) ){
+                                if(requestreceived[adsts[divisions[i]][j]][hash].exists && keccak256(bytes(requestreceived[adsts[divisions[i]][j]][hash].status))==keccak256(bytes("accepted"))){
+                                        for(uint k=0;k<adsts[division].length;k++){
+                                            requestreceived[adsts[division][k]][hash].status="accepted by someone";
+                                        }
+                                        return;
+                                }
+                            }
+            }
+        }
+        if(temp1==true){
+            for(uint i=0;i<divisions.length;i++){
+                for(uint j=0;j<adsts[divisions[i]].length;j++){
+                    if(keccak256((bytes(adsts[divisions[i]][j])))!=keccak256((bytes(origin)))){
+                        if(keccak256(bytes(adsts[divisions[i]][j]))==keccak256((bytes(currentadst)))){
+                            trackorder[origin][hash].push(s);
+                            requestreceived[currentadst][hash].status="accepted";
+                            requestsent[origin][hash].status=s;
+                        }
+                        else{
+                            string memory adst=adsts[divisions[i]][j];
+                            if(requestreceived[adst][hash].exists && keccak256(bytes(requestreceived[adst][hash].status))==keccak256(bytes("pending"))){
+                                requestreceived[adst][hash].status="accepted by someone";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            if(keccak256((bytes(origin)))==keccak256(bytes(division))){
+                trackorder[origin][hash].push(s);
+                requestreceived[currentadst][hash].status="accepted";
+                requestsent[origin][hash].status=s;
+                for(uint i=0;i<adsts[division].length;i++){
+                    if(keccak256(bytes(adsts[division][i]))!=keccak256((bytes(currentadst)))){
+                       if(requestreceived[adsts[division][i]][hash].exists && keccak256(bytes(requestreceived[adsts[division][i]][hash].status))==keccak256(bytes("pending"))){
+                         requestreceived[adsts[division][i]][hash].status="accepted by someone";
+                       }
+                    }
+                }
+            }
+            else{
+                trackorder[origin][hash].push(s);
+                requestsent[origin][hash].status=s;
+                requestreceived[currentadst][hash].status="accepted";
+                for(uint i=0;i<divisions.length;i++){
+                        for(uint j=0;j<adsts[divisions[i]].length;j++){
+                            if(keccak256(bytes(adsts[divisions[i]][j]))!=keccak256(bytes(currentadst)) ){
+                                if(requestreceived[adsts[divisions[i]][j]][hash].exists && keccak256(bytes(requestreceived[adsts[division][i]][hash].status))==keccak256(bytes("pending"))){
+                                        requestreceived[adsts[divisions[i]][j]][hash].status="accepted by someone";
+                                       
+                                }
+                            }
+                        }   
+                }
+                
+            }
+        }
+    }
+    function getallhashes(string memory role,uint c) public view returns(string[] memory){
+        if(c==0){
+            return getsenthashes[role];
+        }
+        return getreceivedhashes[role];
+    }
+    function getallreceivedrole(string memory adst,string memory hash) public view returns(ADST memory) {
+        return requestreceived[adst][hash];
+    }
+    function getalladstsrole(string memory adst,string memory hash) public view returns(ADST memory) {
+        return requestsent[adst][hash];
+    }
+    function adstdecline(string memory hash,string memory origin,string memory currentadst,string memory division) public {
+        requestreceived[currentadst][hash].status="declined";
+        for(uint i=0;i<adsts[division].length;i++){
+            if(keccak256(bytes(adsts[division][i]))!=keccak256(bytes(origin))){
+                if(keccak256(bytes(requestreceived[adsts[division][i]][hash].status))!=keccak256((bytes("declined")))){
+                    return;
+                }
+            }
+        }
+        if(requestreceived[division][hash].exists){
+                 requestreceived[division][hash].status="declined by adsts";
+        }
+        else{
+            requestsent[division][hash].status="declined by adsts";
+        }
+    }
+    function ddstsent(string memory hash,string memory origin,string[] memory p,uint[] memory q,string memory endtime) public {
+        trackorder[origin][hash].push("approved to adsts");
+        requestsent[origin][hash]=ADST(hash,origin,origin,p,q,endtime,"approved to adsts",true);
+        getsenthashes[origin].push(hash);
+        for(uint i=0;i<adsts[origin].length;i++){
+            getreceivedhashes[adsts[origin][i]].push(hash);
+            requestreceived[adsts[origin][i]][hash]=ADST(hash,origin,origin,p,q,endtime,"pending",true);
+        }
+    }
+    function ddstsenttoadsts(string memory from,string memory div,string memory origin,string memory hash,string[] memory p,uint[] memory q,string memory endtime) public {
+        if(keccak256(bytes(from))==keccak256(bytes("DGST"))){
+            for(uint i=0;i<adsts[div].length;i++){
+                getreceivedhashes[adsts[div][i]].push(hash);
+                trackorder[origin][hash].push(string(abi.encodePacked("approved to adsts by ",div)));
+                requestreceived[div][hash].status="approved to adsts";
+                requestreceived[adsts[div][i]][hash]=ADST(hash,origin,div,p,q,endtime,"pending",true);
+            }
+        }
+        else{
+            for(uint i=0;i<adsts[div].length;i++){
+                trackorder[origin][hash].push("approved to adsts");
+                if(keccak256((bytes(origin)))!=keccak256((bytes(adsts[div][i])))){
+                getreceivedhashes[adsts[div][i]].push(hash);
+                requestreceived[div][hash].status="approved to adsts";
+                requestreceived[adsts[div][i]][hash]=ADST(hash,origin,div,p,q,endtime,"pending",true);
+                }
+            }
+        }
+    }
+    function ddstsendtodgst(string memory origin,string memory hash,string memory div,string[] memory p,uint[] memory q,string memory endtime) public {
+        requestreceived["DGST"][hash]=ADST(hash,origin,div,p,q,endtime,"pending",true);
+        trackorder[origin][hash].push("send to dgst");
+        getreceivedhashes["DGST"].push(hash);
+         if(keccak256(bytes(origin))==keccak256(bytes(div))){
+            requestsent[div][hash].status="approved to dgst";
+            return;
+         }
+        requestreceived[div][hash].status="approved to dgst";
+    }
+    function dgstaccept(string memory hash,string memory origin) public {
+        trackorder[origin][hash].push("accepted by dgst");
+        requestsent[origin][hash].status="accepted by dgst";
+        requestreceived["DGST"][hash].status="accepted";
+    }
+    function check(string memory division,string memory hash) public view returns(bool){
+          for(uint i=0;i<divisions.length;i++){
+            if(keccak256(bytes(divisions[i]))!=keccak256(bytes(division))){
+                if(keccak256(bytes(requestreceived[divisions[i]][hash].status))!=keccak256(bytes("declined by adsts"))){
+                    return false;
+                }
+            }
+          }
+          return true;
+    }
+    function dgstsentodivisions(string memory from,string memory hash,string memory origin,string[] memory p,uint[] memory q,string memory endtime) public {
+        trackorder[origin][hash].push("approved to divisions");
+        for(uint i=0;i<divisions.length;i++){
+            if(keccak256(bytes(divisions[i]))!=keccak256(bytes(from))){
+                requestreceived["DGST"][hash].status="approved to divisions";
+                 getreceivedhashes[divisions[i]].push(hash);
+                requestreceived[divisions[i]][hash]=ADST(hash,origin,"DGST",p,q,endtime,"pending",true);
+            }
+        }
+    }
+}
