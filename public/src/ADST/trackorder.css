@@ -1,0 +1,77 @@
+/* Container for the checkpoints list */
+/* Basic styling for the order card */
+.order-card {
+    position: relative;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #d2ffc4;
+    border-radius: 8px;
+   
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+
+.order-card:hover {
+    background-color: #e5f0e6; /* Light blue background on hover */
+    box-shadow: 0 4px 8px rgba(214, 208, 208, 0.2); /* Shadow effect on hover */
+}
+.checkpoints-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 10px 0;
+    gap: 20px; /* Adjust the spacing between checkpoints */
+    width: 100%;
+}
+
+
+
+/* Checkpoint circle styling */
+.checkpoints-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 20px; /* Size of the checkpoint circle */
+    height: 20px; /* Size of the checkpoint circle */
+    border-radius: 50%;
+    border: 2px solid #007bff; /* Border color for each checkpoint */
+    background-color: #fff; /* Background color for each checkpoint */
+}
+
+/* Different colors for different checkpoint types */
+.checkpoints-item.start {
+    background-color: red; /* Starting checkpoint color */
+}
+
+.checkpoints-item.middle {
+    background-color: rgb(243, 234, 154); /* Middle checkpoints color */
+}
+
+.checkpoints-item.end {
+    background-color: rgb(35, 209, 93); /* Ending checkpoint color */
+}
+
+/* Text below each checkpoint */
+.checkpoints-text {
+    margin-top: 5px; /* Space between the checkpoint and the text */
+    text-align: center;
+    font-size: 12px; /* Font size for the text */
+    color: #333; /* Text color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .checkpoints-container {
+        gap: 10px; 
+    }
+
+    .checkpoints-item {
+        width: 15px; 
+        height: 15px; 
+    }
+
+    .checkpoints-text {
+        font-size: 10px; 
+    }
+}

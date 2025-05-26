@@ -1,0 +1,2 @@
+const address="0x9C824CE26991a228E58D7597e55710ef4DF6bB74"
+export default address;

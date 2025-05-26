@@ -1,0 +1,161 @@
+/* .containerofregis{
+  background-color: rgb(244, 247, 244);
+  margin-top: 100px;
+  width: 400px;
+  
+ 
+  border-radius: 0.5rem;
+  border-top: rgb(80, 98, 255) 1.0rem solid;
+}
+
+ .hregis{
+  margin: 1rem 0;
+}
+
+.formofregis {
+  display: flex;
+  flex-direction: column;
+  
+  gap: 1.4rem;
+}
+
+.formofregis div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.inputofregis {
+  padding: 0.5rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgb(71, 70, 70);
+  font-size: 1.1rem;
+  background: transparent;
+}
+
+.buttonofregis {
+  background-color: rgb(80, 98, 255);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0.3rem;
+}  */
+
+/* General Styles for the Container */
+.containerofregis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient( #fafafd, #e1e8ee); 
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.hregis {
+  font-family: 'Arial', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  width: 100%; 
+}
+
+.formofregis {
+  width: 100%;
+  max-width: 500px; 
+  background: #fff; 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.formofregis div {
+  margin-bottom: 15px;
+}
+
+.inputofregis {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.inputofregis:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+button.buttonofregis {
+  width: 100%;
+  padding: 12px;
+  background: #007bff; 
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button.buttonofregis:hover {
+  background: #0056b3;
+}
+
+button.buttonofregis:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .containerofregis {
+      padding: 15px;
+  }
+
+  .hregis {
+      font-size: 1.75rem; 
+  }
+
+  .formofregis {
+      padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hregis {
+      font-size: 1.5rem; 
+  }
+
+  .formofregis {
+      padding: 10px;
+  }
+
+  .inputofregis {
+      padding: 8px;
+      font-size: 0.875rem;
+  }
+
+  button.buttonofregis {
+      padding: 10px;
+      font-size: 0.875rem;
+  }
+}
+
+

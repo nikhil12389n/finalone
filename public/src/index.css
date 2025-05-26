@@ -1,0 +1,12 @@
+body{
+    background-color:rgb(238, 246, 255);
+    min-height: 100vh;
+    min-width: 100vw;
+    margin: 0;
+    padding: 0;
+    margin-top: 60px;
+}
+
+.tablereceived th,td{
+    border: 1px solid black;
+}

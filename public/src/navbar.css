@@ -1,0 +1,49 @@
+/* Ensure the navbar stays fixed at the top */
+.navbar-cont {
+    width: 100%;
+    position: fixed; /* Fix the navbar to the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+/* Adjust padding for the body or main content to prevent overlap */
+body {
+    padding-top: 56px; /* Adjust based on navbar height */
+}
+
+/* General styles for the navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 0 15px; 
+    background-color: #f8f9fa; /* Background color to ensure visibility */
+}
+
+/* Center the text within the navbar */
+.navbar-brand {
+    flex: 1; 
+    text-align: center; 
+}
+
+/* Style for the logout button */
+.btn-primary {
+    margin-left: auto; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .navbar {
+        flex-direction: column; 
+    }
+
+    .navbar-brand {
+        margin-bottom: 10px; 
+    }
+
+    .btn-primary {
+        margin: 0;
+    }
+}
